@@ -72,19 +72,25 @@ class _MyHomePageState extends State<MyHomePage> {
         onTap: onTabTapped,
         items: [
           BottomNavigationBarItem(
+            // backgroundColor: Colors.red,
             icon: Icon(Icons.home),
             label: "首页",
           ),
           BottomNavigationBarItem(
+            // backgroundColor: Colors.blue,
             icon: Icon(Icons.search),
             label: "热搜",
           ),
           BottomNavigationBarItem(
+            // backgroundColor: Colors.green,
             icon: Icon(Icons.extension),
             label: "体系",
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.person),
+            // backgroundColor: Colors.orange,
+            icon: Icon(
+              Icons.person,
+            ),
             label: "我的",
           ),
         ],
