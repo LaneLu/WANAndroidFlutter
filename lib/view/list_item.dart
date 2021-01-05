@@ -4,8 +4,8 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_wanandroid/config/ApiUrl.dart';
 import 'package:flutter_wanandroid/config/routes_name_config.dart';
-import 'package:flutter_wanandroid/diohttp/DioManager.dart';
-import 'package:flutter_wanandroid/diohttp/NWMethod.dart';
+import 'package:flutter_wanandroid/diohttp/dio_manager.dart';
+import 'package:flutter_wanandroid/diohttp/nw_method.dart';
 import 'package:flutter_wanandroid/entity/article_list_entity.dart';
 import 'package:flutter_wanandroid/utils/FluttertoastUtils.dart';
 import 'package:sprintf/sprintf.dart';
@@ -291,7 +291,7 @@ class ListItem {
         stateFunction(articleList[index], index);
       }
     }, error: (error) {
-      FluttertoastUtils.showToast(error.errorMsg);
+      FluttertoastUtils.showToast(error.errorMsg, textColor: Colors.black);
       if (error.errorCode == -1001) {
         //请先登录！
         Navigator.pushNamed(context, RoutersNameConfig.login_page);

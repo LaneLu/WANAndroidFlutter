@@ -7,10 +7,10 @@ import 'package:flutter_wanandroid/config/ApiUrl.dart';
 import 'package:flutter_wanandroid/config/GlobalConfig.dart';
 import 'package:path_provider/path_provider.dart';
 
-import 'BaseEntity.dart';
-import 'BaseListEntity.dart';
-import 'ErrorEntity.dart';
-import 'NWMethod.dart';
+import 'base_entity.dart';
+import 'base_list_entity.dart';
+import 'error_entity.dart';
+import 'nw_method.dart';
 
 class DioManager {
   static final DioManager _shared = DioManager._internal();

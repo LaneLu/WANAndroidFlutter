@@ -1,4 +1,4 @@
-import 'EntityFactory.dart';
+import 'entity_factory.dart';
 
 class BaseEntity<T> {
   int errorCode;

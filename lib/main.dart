@@ -1,26 +1,32 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_wanandroid/utils/custom_colors.dart';
 
-import 'home/HomePage.dart';
-import 'mine/MinePage.dart';
-import 'search/HotSearchPage.dart';
-import 'tree/TreeTypePage.dart';
+import 'api/base/json_convert_content.dart';
+import 'brower.dart';
+import 'config/routes_name_config.dart';
+import 'entity/tree_type_entity.dart';
+import 'home/home_page.dart';
+import 'login/login.dart';
+import 'mine/mine_page.dart';
+import 'search/hot_search_page.dart';
+import 'tree/tree_type_page.dart';
 
-void main() {
-  runApp(CommonApp());
-}
+void main() => runApp(CommonApp());
 
 class CommonApp extends StatelessWidget {
   // 注册路由表
   final Map<String, WidgetBuilder> _routes = {
     "/": (context) => MyHomePage(),
-    // RoutersNameConfig.browser: (context) => Browser(),
+    RoutersNameConfig.browser: (context) => Browser(),
     // RoutersNameConfig.search_result: (context) =>
     //     SearchResultPage(ModalRoute.of(context).settings.arguments.toString()),
     // RoutersNameConfig.chapter: (context) => ChaptersPage(
     //     list: JsonConvert.fromJsonAsT<List<ChaptersEntity>>(
     //         jsonDecode(ModalRoute.of(context).settings.arguments)["list"])),
     // RoutersNameConfig.unknown_page: (context) => UnknownPage(),
-    // RoutersNameConfig.login_page: (context) => Login(),
+    RoutersNameConfig.login_page: (context) => Login(),
     // RoutersNameConfig.treeListPage: (context) => TreeListPage(
     //       list: JsonConvert.fromJsonAsT<List<TreeTypechild>>(
     //           jsonDecode(ModalRoute.of(context).settings.arguments)["list"]),
@@ -36,7 +42,9 @@ class CommonApp extends StatelessWidget {
     return MaterialApp(
       title: "玩安卓",
       theme: ThemeData(
-        primaryColor: Colors.blue,
+        primaryColor: CustomColors.colorPrimary,
+        primaryColorDark: CustomColors.colorPrimaryDark,
+        accentColor: CustomColors.colorAccent,
       ),
       routes: _routes,
       initialRoute: "/",
@@ -67,34 +75,44 @@ class _MyHomePageState extends State<MyHomePage> {
         children: pages,
       ),
       //底部导航栏
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: currentIndex,
-        onTap: onTabTapped,
-        items: [
-          BottomNavigationBarItem(
-            // backgroundColor: Colors.red,
-            icon: Icon(Icons.home),
-            label: "首页",
-          ),
-          BottomNavigationBarItem(
-            // backgroundColor: Colors.blue,
-            icon: Icon(Icons.search),
-            label: "热搜",
-          ),
-          BottomNavigationBarItem(
-            // backgroundColor: Colors.green,
-            icon: Icon(Icons.extension),
-            label: "体系",
-          ),
-          BottomNavigationBarItem(
-            // backgroundColor: Colors.orange,
-            icon: Icon(
-              Icons.person,
+      bottomNavigationBar: Theme(
+        data: Theme.of(context).copyWith(
+          canvasColor: Colors.white, //背景颜色
+          primaryColor: CustomColors.wanColor, //设置高亮文字颜色
+          // //设置一般文字颜色
+          // textTheme: Theme.of(context)
+          //     .textTheme
+          //     .copyWith(caption: new TextStyle(color: Colors.yellow))
+        ),
+        child: BottomNavigationBar(
+          currentIndex: currentIndex,
+          onTap: onTabTapped,
+          items: [
+            BottomNavigationBarItem(
+              // backgroundColor: Colors.red,
+              icon: Icon(Icons.home),
+              label: "首页",
             ),
-            label: "我的",
-          ),
-        ],
-        type: BottomNavigationBarType.fixed,
+            BottomNavigationBarItem(
+              // backgroundColor: Colors.blue,
+              icon: Icon(Icons.navigation),
+              label: "导航",
+            ),
+            BottomNavigationBarItem(
+              // backgroundColor: Colors.green,
+              icon: Icon(Icons.extension),
+              label: "体系",
+            ),
+            BottomNavigationBarItem(
+              // backgroundColor: Colors.orange,
+              icon: Icon(
+                Icons.person,
+              ),
+              label: "我的",
+            ),
+          ],
+          type: BottomNavigationBarType.fixed,
+        ),
       ),
     );
   }

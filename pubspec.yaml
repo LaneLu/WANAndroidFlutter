@@ -37,12 +37,15 @@ dependencies:
   fluttertoast: ^4.0.1
   # 轮播图
   flutter_swiper: ^1.1.6
+  flutter_page_indicator: ^0.0.3
   # 缓存网络图片
   cached_network_image: ^2.2.0+1
   # 字符串格式化
   sprintf: ^4.0.2
   # webView
   webview_flutter: ^0.3.21
+  # 数据持久化
+  shared_preferences: ^0.5.7+2
 
 dev_dependencies:
   flutter_test:

@@ -22,6 +22,7 @@ class ListPage extends StatefulWidget {
 
   bool isOnRefresh = true;
   bool isLoadMore = false;
+
   // 底部显示没有更多数据
   bool noMoreData = false;
 
@@ -45,6 +46,7 @@ class ListPage extends StatefulWidget {
 }
 
 class ListPageState extends State<ListPage> {
+
   ScrollController _scrollController = ScrollController(); //listview的控制器
 
   @override
@@ -52,7 +54,8 @@ class ListPageState extends State<ListPage> {
     // TODO: implement initState
     super.initState();
     _scrollController.addListener(() {
-      if (widget.isLoadMore && !widget.noMoreData &&
+      if (widget.isLoadMore &&
+          !widget.noMoreData &&
           widget.loadMoreFunction != null &&
           _scrollController.position.pixels ==
               _scrollController.position.maxScrollExtent) {
@@ -67,12 +70,12 @@ class ListPageState extends State<ListPage> {
     if (widget.isOnRefresh && widget.onRefreshFunction != null) {
       return RefreshIndicator(
         onRefresh: widget.onRefreshFunction,
-        child: new ListView.builder(
+        child: ListView.builder(
 //          separatorBuilder: (context, index) => Divider(height: .0),
           itemBuilder: (BuildContext context, int position) {
             return buildItemWidget(context, position);
           },
-          itemCount: _getListCount()+ (widget.isLoadMore ? 1 : 0),
+          itemCount: _getListCount() + (widget.isLoadMore ? 1 : 0),
           controller: _scrollController,
         ),
       );
@@ -109,7 +112,8 @@ class ListPageState extends State<ListPage> {
   Widget buildItemWidget(BuildContext context, int index) {
     if (index < getHeaderCount()) {
       return _headerItemWidget(context, index);
-    } else if (getFootCount() > 0 && index < _getListCount() &&
+    } else if (getFootCount() > 0 &&
+        index < _getListCount() &&
         index >= getHeaderCount() + getItemCount()) {
       return _footItemWidget(context, index);
     } else if (widget.isLoadMore && index == _getListCount()) {

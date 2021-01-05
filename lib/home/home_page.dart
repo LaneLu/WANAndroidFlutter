@@ -4,11 +4,12 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:flutter_wanandroid/config/ApiUrl.dart';
-import 'package:flutter_wanandroid/diohttp/DioManager.dart';
-import 'package:flutter_wanandroid/diohttp/NWMethod.dart';
+import 'package:flutter_wanandroid/diohttp/dio_manager.dart';
+import 'package:flutter_wanandroid/diohttp/nw_method.dart';
 import 'package:flutter_wanandroid/entity/article_list_entity.dart';
 import 'package:flutter_wanandroid/entity/banner_test_entity.dart';
 import 'package:flutter_wanandroid/utils/FluttertoastUtils.dart';
+import 'package:flutter_wanandroid/utils/custom_colors.dart';
 import 'package:flutter_wanandroid/view/list_item.dart';
 import 'package:flutter_wanandroid/view/list_refresh_loadmore.dart';
 import 'package:sprintf/sprintf.dart';
@@ -52,51 +53,58 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-
   // item布局
   Widget _renderRow(BuildContext context, int index) {
     return ListItem.init().renderRow(context, index, articleList, 0,
-            (data, position) {
-          setState(() {
-            articleList[position] = data;
-          });
-        });
+        (data, position) {
+      setState(() {
+        articleList[position] = data;
+      });
+    });
   }
 
   // 添加头部banner
   Widget addHeaderBanner(BuildContext context, int index) {
-    return ConstrainedBox(
-        child: Swiper(
-          onTap: (index) {
-            // 点击
-            Navigator.pushNamed((context), "browser",
-                arguments: jsonEncode({
-                  "url": bannerList[index].url,
-                  "title": bannerList[index].title
-                }));
-          },
-          autoplay: false,
-          loop: false,
-          outer: false,
-          itemBuilder: (c, i) {
-            return new CachedNetworkImage(
-                imageUrl: "${bannerList[i].imagePath}",
-                placeholder: (context, url) => new Container(
-                  child: new Center(
-                    child: new CircularProgressIndicator(),
-                  ),
-                  width: 160.0,
-                  height: 90.0,
+    return Theme(
+        data: Theme.of(context).copyWith(accentColor: CustomColors.colorAccent),
+        child: ConstrainedBox(
+            child: Swiper(
+              onTap: (index) {
+                // 点击
+                Navigator.pushNamed((context), "browser",
+                    arguments: jsonEncode({
+                      "url": bannerList[index].url,
+                      "title": bannerList[index].title
+                    }));
+              },
+              autoplay: false,
+              loop: false,
+              outer: false,
+              itemBuilder: (c, i) {
+                return CachedNetworkImage(
+                    imageUrl: "${bannerList[i].imagePath}",
+                    placeholder: (context, url) => Container(
+                          child: Center(
+                            child: CircularProgressIndicator(),
+                          ),
+                          width: 160.0,
+                          height: 160.0,
+                        ),
+                    errorWidget: (context, url, error) => Icon(Icons.error),
+                    fit: BoxFit.cover);
+              },
+              pagination: SwiperPagination(
+                margin: EdgeInsets.all(5.0),
+                alignment: Alignment.bottomCenter,
+                builder: DotSwiperPaginationBuilder(
+                  activeColor: CustomColors.colorAccent,
                 ),
-                errorWidget: (context, url, error) => Icon(Icons.error),
-                fit: BoxFit.cover);
-          },
-          pagination: new SwiperPagination(margin: new EdgeInsets.all(5.0)),
-          itemCount: bannerList == null ? 0 : bannerList.length,
-          controller: _swiperController,
-        ),
-        constraints: new BoxConstraints.loose(
-            new Size(MediaQuery.of(context).size.width, 180.0)));
+              ),
+              itemCount: bannerList == null ? 0 : bannerList.length,
+              controller: _swiperController,
+            ),
+            constraints: new BoxConstraints.loose(
+                new Size(MediaQuery.of(context).size.width, 180.0))));
   }
 
   // 下拉刷新
@@ -123,19 +131,17 @@ class _HomePageState extends State<HomePage> {
     DioManager().request<ArticleListEntity>(
         NWMethod.GET, sprintf(ApiUrl.init().articleList, [pageNum]), params: {},
         success: (data) {
-          setState(() {
-            total = data.total;
-            if (pageNum == 0) {
-              articleList = data.datas;
-            } else {
-              articleList.addAll(data.datas);
-            }
-            pageNum++;
-          });
-        }, error: (error) {
+      setState(() {
+        total = data.total;
+        if (pageNum == 0) {
+          articleList = data.datas;
+        } else {
+          articleList.addAll(data.datas);
+        }
+        pageNum++;
+      });
+    }, error: (error) {
       FluttertoastUtils.showToast(error.errorMsg);
     });
   }
-
-
 }
